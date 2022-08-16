@@ -1,0 +1,66 @@
+local CD = false
+
+local d = game:GetService("Debris")
+
+game.ReplicatedStorage.M1.OnServerEvent:Connect(function(player, combo)
+	local hitbox = script.HitBox:Clone()
+	local char = player.Character
+	local cframe = char.PrimaryPart.CFrame.LookVector
+	local PosX = char.PrimaryPart.Position.X
+	local PosY = char.PrimaryPart.Position.Y
+	local PosZ = char.PrimaryPart.Position.Z
+	local hum = char:FindFirstChildWhichIsA("Humanoid")
+	local Punch1 = script.Punch1
+	local Punch2 = script.Punch2
+	local Punch3 = script.Punch3
+	local Punch4 = script.Punch4
+	local Hit = script.HitAnim
+	if combo == 1 then
+		hum:LoadAnimation(Punch1):Play()
+	end
+	if combo == 2 then
+		hum:LoadAnimation(Punch2):Play()
+	end
+	if combo == 3 then
+		hum:LoadAnimation(Punch3):Play()
+	end
+	if combo == 4  then
+		hum:LoadAnimation(Punch4):Play()
+	end
+		hitbox.Parent = workspace
+		hitbox.CFrame = char.PrimaryPart.CFrame * CFrame.new(0, 0, (hitbox.Size.Z/2)*-1)
+		local weld = Instance.new("WeldConstraint")
+		weld.Part0 = hitbox
+		weld.Part1 = char.PrimaryPart
+		weld.Parent = hitbox
+		d:AddItem(hitbox, .35)
+	hitbox.Touched:Connect(function(hitpart)
+		if not hitpart.Parent:FindFirstChild("HitFolder") then
+			local hitfolder = Instance.new("Folder")
+			hitfolder.Name = "HitFolder"
+			hitfolder.Parent = hitpart.Parent
+			if not hitfolder:FindFirstChild(player.Name) then
+				local killer = Instance.new("StringValue")
+				killer.Name = player.Name
+				killer.Value = player.Name
+				killer.Parent = hitfolder
+			end
+		end
+		local ignorelist = {}
+		if not hitpart:IsDescendantOf(char) then
+			if hitpart.Parent:FindFirstChildWhichIsA("Humanoid") then
+				local enemy = hitpart.Parent
+				if (table.find(ignorelist, enemy) == nil) then
+					table.insert(ignorelist, enemy)
+					enemy.Humanoid:TakeDamage(0.5)
+					enemy.Humanoid:LoadAnimation(Hit):Play()
+					local Kb = Instance.new("BodyVelocity")
+					Kb.MaxForce = Vector3.new(6,6,6)
+					Kb.Velocity = char.PrimaryPart.CFrame.LookVector * 10
+					Kb.Parent = enemy.PrimaryPart
+					d:AddItem(Kb, .2)
+				end
+			end
+		end
+	end)
+end)
