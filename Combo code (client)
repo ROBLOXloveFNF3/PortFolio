@@ -1,0 +1,28 @@
+local uis =  game:GetService("UserInputService")
+
+local CD = false
+
+local T = os.time()
+
+local combo = 0
+
+uis.InputBegan:Connect(function(input, isTyping)
+	if isTyping then
+		return
+	end
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		if CD == false then
+			combo += 1
+			if combo > 4 then
+				combo = 1
+				CD = true
+				wait(1)
+				CD = false
+			end
+			game.ReplicatedStorage.M1:FireServer(combo)
+			CD = true
+			wait(0.25)
+			CD = false
+		end
+	end
+end)
