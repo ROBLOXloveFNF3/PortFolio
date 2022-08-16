@@ -1,0 +1,4 @@
+local humanoid = script:FindFirstChildWhichIsA("Humanoid")
+local anim = script:FindFirstChildWhichIsA("Animation")
+local animProcessed = humanoid:LoadAnimation(anim)
+animProcessed:Play()
