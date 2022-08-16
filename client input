@@ -1,0 +1,13 @@
+local uis = game:GetService("UserInputService")
+uis.InputBegan:Connect(function(input, isTyping)
+	if isTyping then
+		return
+	elseif input.KeyCode == Enum.KeyCode.E then
+		game.ReplicatedStorage.E:FireServer()
+	elseif input.KeyCode == Enum.KeyCode.R then
+		game.ReplicatedStorage.R:FireServer()
+	
+	
+	
+	end
+end)
